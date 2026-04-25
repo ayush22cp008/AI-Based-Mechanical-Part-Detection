@@ -1,2 +1,2 @@
 # AI-Based-Mechanical-Part-Detection
-Real-time mechanical part detection using yolov8 Nano and Unity mobile app
+AI-based real-time mechanical part detection system using YOLOv8 Nano and a Unity-based mobile application.
