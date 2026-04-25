@@ -216,3 +216,29 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# ================================
+# Project-specific ignores
+# ================================
+
+# Dataset (do NOT upload)
+dataset/
+pretraining dataset/
+finetunning dataset/
+
+# Model weights (very important)
+*.pt
+*.onnx
+*.engine
+
+# Unity build files
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+
+# Large files
+*.zip
+*.apk
