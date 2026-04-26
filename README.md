@@ -1,25 +1,41 @@
-# AI-Based Mechanical Part Detection
+# AI-Based Mechanical Part Detection (YOLOv8 + Unity Mobile App)
 
-A real-time computer vision system for identifying mechanical components using YOLOv8 Nano, deployed as a Unity mobile application.
+A real-time computer vision system for identifying and classifying mechanical components, deployed as a native Android application built with Unity.
+
+[![Model](https://img.shields.io/badge/Model-YOLOv8%20Nano-blue)](https://github.com/ultralytics/ultralytics)
+[![Platform](https://img.shields.io/badge/Platform-Android-green)](https://developer.android.com/)
+[![Framework](https://img.shields.io/badge/Framework-Unity%202022%20LTS-black)](https://unity.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 ---
 
 ## Overview
 
-This project detects and classifies 25 types of mechanical parts (bolts, nuts, screws, bearings, gears, shafts, etc.) in real time using a mobile device camera. A custom dataset was built from scratch using synthetic 3D renders and real-world images. The trained YOLOv8 Nano model is integrated into an Android application built with Unity.
+This project detects and classifies **25 types of mechanical parts** — bolts, nuts, screws, bearings, gears, shafts, and more — in real time using a mobile device camera. A custom dataset was constructed from scratch using synthetic 3D renders, real-world images, and background-augmented composites. The trained YOLOv8 Nano model is deployed as a native plugin within an Android application built in Unity.
 
-> **The Unity mobile app is the primary system.** The Python inference script is for local testing only.
+> **Primary System:** Unity mobile application (Android).  
+> The Python inference script is included for local testing and development purposes only.
+
+---
+
+## Demo Video
+
+A full walkthrough of the Android application — including both General and Specific Detection modes — is available on YouTube:
+
+**[▶ Watch the Demo on YouTube](https://www.youtube.com/shorts/NPIHQJ7QCFs)**
+
+The demo showcases real-time bounding box rendering, confidence score display, and the target-specific detection workflow on a live camera feed.
 
 ---
 
 ## Features
 
-- Real-time mechanical part detection via mobile camera
-- **General Detection** — detects up to 5 components simultaneously
-- **Specific Detection** — user selects a target component; system searches only for it
-- Displays bounding boxes, class labels, and confidence scores
-- Camera stability check to reduce motion blur and unnecessary inference
-- Lightweight model optimized for mobile hardware
+- **Real-time detection** via mobile device camera using a lightweight on-device model
+- **General Detection** — simultaneously detects up to 5 mechanical components per frame
+- **Specific Detection** — user selects a target class; the system searches exclusively for it
+- Bounding box overlay with class labels and confidence scores
+- Camera stability check to suppress inference during motion blur, reducing false detections
+- Optimized for low-latency performance on Android mobile hardware
 
 ---
 
@@ -27,23 +43,23 @@ This project detects and classifies 25 types of mechanical parts (bolts, nuts, s
 
 | Layer | Tools |
 |---|---|
-| Model | YOLOv8 Nano (Ultralytics) |
-| Training | Python, PyTorch, OpenCV |
+| Detection Model | YOLOv8 Nano (Ultralytics) |
+| Training Framework | Python, PyTorch, OpenCV |
 | Annotation | Roboflow, Segment Anything Model (SAM) |
-| Dataset Optimization | DINOv2, K-Means Clustering |
-| Mobile App | Unity (C#), AR Foundation |
-| Deployment Target | Android |
+| Dataset Optimization | DINOv2 embeddings, K-Means Clustering |
+| Mobile Application | Unity (C#), AR Foundation |
+| Deployment Target | Android (API level 24+) |
 
 ---
 
 ## How It Works
 
-1. **Dataset Collection** — Synthetic images rendered from 3D CAD models (Blender + TraceParts) and real-world images sourced from videos and online platforms.
-2. **Annotation** — Segmentation-based labeling using SAM via Roboflow for pixel-level masks.
-3. **Augmentation** — Background replacement technique applied to reduce background overfitting. Objects are isolated using segmentation masks and composited onto diverse backgrounds.
-4. **Dataset Optimization** — DINOv2 feature embeddings + K-Means clustering used to remove redundant images and balance the dataset.
-5. **Model Training** — YOLOv8 Nano trained on segmentation annotations (6,000 images across 25 classes).
-6. **Mobile Deployment** — Trained model exported and integrated into Unity as a native plugin. AR Foundation manages the camera feed, preprocessing, and real-time rendering.
+1. **Dataset Collection** — Synthetic images rendered from 3D CAD models (Blender + TraceParts) combined with real-world images sourced from video frames and public platforms.
+2. **Annotation** — Pixel-level segmentation masks generated semi-automatically using SAM via Roboflow, significantly reducing manual labeling effort across 25 classes.
+3. **Background Augmentation** — Objects are isolated via segmentation masks and composited onto diverse backgrounds to prevent background overfitting — a critical step for real-world generalization.
+4. **Dataset Optimization** — DINOv2 feature embeddings combined with K-Means clustering to remove near-duplicate images and produce a balanced, representative dataset.
+5. **Model Training** — YOLOv8 Nano trained on segmentation annotations across 6,000 images and 25 classes.
+6. **Mobile Deployment** — Model exported and integrated into Unity as a native inference plugin. AR Foundation manages the camera pipeline, frame preprocessing, and real-time bounding box rendering.
 
 ---
 
@@ -58,32 +74,16 @@ This project detects and classifies 25 types of mechanical parts (bolts, nuts, s
 
 ---
 
-## Project Structure
-
-```
-AI-Based-Mechanical-Part-Detection/
-│
-├── dataset_scripts/        # Data collection, frame extraction, background replacement
-├── training/               # YOLOv8 training scripts and config files
-├── inference/              # Python webcam/image inference for local testing
-├── unity_app/              # Unity project (Android mobile application)
-└── outputs/                # Sample screenshots and detection results
-```
-
----
-
 ## Results
 
-- Model successfully detects mechanical parts across varied backgrounds and orientations
-- Background replacement augmentation measurably improved real-world detection accuracy
-- Stable real-time performance achieved on Android via camera stability logic and AR Foundation optimizations
+The model successfully detects mechanical parts across varied backgrounds, lighting conditions, and orientations. Background replacement augmentation produced measurable improvements in real-world detection accuracy by closing the domain gap between synthetic training data and real-world inference conditions.
 
-**Sample Output**
+**Sample Detection Performance**
 
-> General Detection: detects nut (76%), screw (76%), screw (84%) simultaneously  
-> Specific Detection: targets nut only — detected at 96% confidence
-
-*(See `/outputs` for screenshots)*
+| Mode | Example Output |
+|---|---|
+| General Detection | Nut (76%), Screw (76%), Screw (84%) detected simultaneously |
+| Specific Detection | Nut targeted — detected at **96% confidence** |
 
 ---
 
@@ -91,11 +91,24 @@ AI-Based-Mechanical-Part-Detection/
 
 | Challenge | Solution |
 |---|---|
-| No public dataset available | Built custom dataset from 3D renders + real-world videos |
-| Background overfitting | Background replacement augmentation using segmentation masks |
-| Domain gap (synthetic vs real) | Combined synthetic, real, and augmented data during training |
-| Mobile performance / latency | YOLOv8 Nano + AR Foundation async processing + stability-based inference |
-| Annotation effort | Semi-automatic labeling with SAM via Roboflow |
+| No public dataset for mechanical parts | Built custom dataset from 3D renders and real-world video frames |
+| Background overfitting from synthetic data | Background replacement augmentation using SAM segmentation masks |
+| Domain gap between synthetic and real images | Combined synthetic, real, and augmented splits during training |
+| Mobile inference latency constraints | YOLOv8 Nano + AR Foundation async pipeline + stability-based inference gating |
+| Manual annotation effort at scale | Semi-automatic labeling with SAM via Roboflow |
+
+---
+
+## Project Structure
+
+```
+AI-Based-Mechanical-Part-Detection/
+│
+├── dataset_scripts/        # Data collection, frame extraction, background replacement
+├── training/               # YOLOv8 training scripts and config files
+├── inference/              # Python webcam/image inference (local testing only)
+├── unity_app/              # Unity project — primary Android mobile application
+```
 
 ---
 
@@ -103,9 +116,9 @@ AI-Based-Mechanical-Part-Detection/
 
 ### Mobile Application (Primary)
 
-1. Open the `unity_app/` folder in Unity (tested with Unity 2022 LTS or later)
-2. Ensure AR Foundation and Android Build Support packages are installed
-3. Place the exported `.onnx` or compatible model file in the appropriate plugin folder
+1. Open the `unity_app/` folder in Unity (2022 LTS or later)
+2. Ensure **AR Foundation** and **Android Build Support** packages are installed
+3. Place the exported `.onnx` (or compatible) model file in the appropriate plugin directory
 4. Build and deploy to an Android device (API level 24+)
 5. Launch the app → select **General Detection** or **Specific Detection**
 
@@ -118,7 +131,7 @@ pip install ultralytics opencv-python
 # Run webcam inference
 python inference/detect.py --source 0 --weights training/weights/best.pt
 
-# Run on an image
+# Run on a single image
 python inference/detect.py --source path/to/image.jpg --weights training/weights/best.pt
 ```
 
@@ -136,21 +149,11 @@ yolo task=segment mode=train \
 
 ---
 
-## Future Improvements
-
-- Expand dataset to cover more mechanical part classes and edge cases
-- Improve performance under low-light and high-occlusion conditions
-- Explore model quantization (INT8) for further mobile optimization
-- Add cloud inference option for higher-accuracy detection
-- Integrate user feedback loop to continuously improve detection
-
----
-
 ## Author
 
 **Ayush Halpati**  
 B.Tech Computer Engineering — BVM Engineering College, Vallabh Vidyanagar  
-Internship at Invisible Fiction, V.V. Nagar, Anand, Gujarat  
+Internship at Invisible Fiction, V.V. Nagar, Anand, Gujarat
 
 ---
 
