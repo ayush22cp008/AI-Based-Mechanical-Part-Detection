@@ -151,9 +151,11 @@ yolo task=segment mode=train \
 
 ## Author
 
-**Ayush Halpati**  
-B.Tech Computer Engineering — BVM Engineering College, Vallabh Vidyanagar  
-Internship at Invisible Fiction, V.V. Nagar, Anand, Gujarat
+**Ayush Halpati**
+
+## Acknowledgement
+
+This is final year project was developed as part of my B.Tech Computer Engineering work at BVM Engineering College and during my internship at Invisible Fiction, V.V. Nagar, Anand, Gujarat.
 
 ---
 
