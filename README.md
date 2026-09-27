@@ -9,6 +9,10 @@ A real-time computer vision system for identifying and classifying mechanical co
 
 ---
 
+## Problem Statement
+
+Manually identifying mechanical parts (bolts, nuts, bearings, gears, etc.) on a shop floor or in inventory is slow and error-prone, and there was no public dataset or lightweight mobile solution built specifically for this — most CV datasets target generic objects, not mechanical components. This project builds a custom 6,000-image dataset from scratch (synthetic 3D renders + real images + SAM-based augmentation) and deploys a real-time YOLOv8 Nano detector inside a native Android app, so parts can be identified instantly from a phone camera.
+
 ## Overview
 
 This project detects and classifies **25 types of mechanical parts** — bolts, nuts, screws, bearings, gears, shafts, and more — in real time using a mobile device camera. A custom dataset was constructed from scratch using synthetic 3D renders, real-world images, and background-augmented composites. The trained YOLOv8 Nano model is deployed as a native plugin within an Android application built in Unity.
